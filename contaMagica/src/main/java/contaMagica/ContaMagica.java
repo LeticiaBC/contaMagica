@@ -22,4 +22,33 @@ public class ContaMagica {
     return this.status;
   }
 
+  void deposito(int valor) throws INVALID_OPER_EXCEPTION{
+
+    if(valor <= 0)
+        throw(new INVALID_OPER_EXCEPTION(valor)); 
+
+    switch(this.getStatus()){ 
+        case SILVER:
+            this.setSaldo(valor);
+        break;
+
+        case GOLD:
+            this.setSaldo(valor*1.01);
+        break;
+
+        case PLATINUM:
+            this.setSaldo(valor*1.025); 
+        break;
+    } 
+    this.setStatus("deposito");        
+  }
+
+  void retirada(int valor) throws INVALID_OPER_EXCEPTION{
+    //garante que conta nao fica zerada
+    if(this.getSaldo() < valor || valor <= 0)
+      throw(new INVALID_OPER_EXCEPTION(valor));
+
+    this.setSaldo(-valor);
+    this.setStatus("retirada");
+  }
 }
