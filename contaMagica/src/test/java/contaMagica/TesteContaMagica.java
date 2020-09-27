@@ -6,11 +6,66 @@ import org.junit.jupiter.api.Assertions;
 public class TesteContaMagica {
     public static final int SILVER = 0;
     public static final int GOLD = 1;
+    public static final int PLATINUM = 2;
 
     @Test
     public void verificaCategoriaSilver() {
         final ContaMagica contamagica = new ContaMagica();
         Assertions.assertTrue((contamagica.getSaldo() < 50000) && (contamagica.getStatus() == SILVER));
+    }
+
+    @Test
+    public void verificaCategoriaGold() throws INVALID_OPER_EXCEPTION {
+        ContaMagica contamagica = new ContaMagica();
+        contamagica.deposito(50000);
+        Assertions.assertTrue((contamagica.getSaldo() >= 50000 && (contamagica.getSaldo() < 200000))
+                && (contamagica.getStatus() == GOLD));
+    }
+
+    @Test
+    public void verificaCategoriaPlatinum() throws INVALID_OPER_EXCEPTION {
+        ContaMagica contamagica = new ContaMagica();
+        contamagica.deposito(150000);
+        contamagica.deposito(50000);
+        Assertions.assertTrue((contamagica.getSaldo() >= 200000) && (contamagica.getStatus() == PLATINUM));
+    }
+
+    @Test
+    public void verificaAcrescimoSaldoUpgradeSilver() throws INVALID_OPER_EXCEPTION {
+        ContaMagica contamagica = new ContaMagica();
+        double saldoEmConta = contamagica.getSaldo();
+        contamagica.deposito(1000);
+        double saldoAposDeposito = contamagica.getSaldo();
+        Assertions.assertTrue((saldoAposDeposito - saldoEmConta == 1000) && (contamagica.getStatus() == SILVER));
+    }
+
+    @Test
+    public void verificaAcrescimoSaldoUpgradeGold() throws INVALID_OPER_EXCEPTION {
+        ContaMagica contamagica = new ContaMagica();
+        contamagica.deposito(50000);
+        double saldoEmConta = contamagica.getSaldo();
+        contamagica.deposito(1000);
+        double saldoAposDeposito = contamagica.getSaldo();
+        Assertions.assertTrue((saldoAposDeposito - saldoEmConta == 1010) && (contamagica.getStatus() == GOLD));
+    }
+
+    @Test
+    public void verificaAcrescimoSaldoUpgradePlatinum() throws INVALID_OPER_EXCEPTION {
+        ContaMagica contamagica = new ContaMagica();
+        contamagica.deposito(150000);
+        contamagica.deposito(50000);
+        double saldoEmConta = contamagica.getSaldo();
+        contamagica.deposito(1000);
+        double saldoAposDeposito = contamagica.getSaldo();
+        Assertions.assertTrue((saldoAposDeposito - saldoEmConta == 1025) && (contamagica.getStatus() == PLATINUM));
+    }
+
+    @Test
+    public void verificaUpgradeDiretoSilverPlatinum() throws INVALID_OPER_EXCEPTION {
+        ContaMagica contamagica = new ContaMagica();
+        contamagica.deposito(1000);
+        contamagica.deposito(250000);
+        Assertions.assertTrue(contamagica.getStatus() == GOLD);
     }
 
     @Test
@@ -62,9 +117,9 @@ public class TesteContaMagica {
         final ContaMagica contaMagica = new ContaMagica();
         contaMagica.deposito(150000);
         contaMagica.deposito(50000);
-        contaMagica.retirada((175001+500));
+        contaMagica.retirada((175001 + 500));
         System.out.println(contaMagica.getSaldo());
-        Assertions.assertFalse(contaMagica.getStatus() == SILVER); 
-    } 
+        Assertions.assertFalse(contaMagica.getStatus() == SILVER);
+    }
 
 }
